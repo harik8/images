@@ -1,0 +1,30 @@
+String[] buildElements = env.JOB_NAME.split('/')
+String buildName = buildElements[buildElements.length - 2]
+String registry = "quay.io/harik8"
+String dockerImage = "$registry/$buildName"
+String release = "latest"
+
+pipeline {
+    agent {
+        node {
+            label "kaniko"
+	    yamlFile "kube-pod.yaml"
+        }
+    }
+
+    stages {
+        stage("publish") {
+            steps {
+                container(name: 'kaniko', shell: '/busybox/sh') {
+                     withEnv(['PATH+EXTRA=/busybox:/kaniko']) {
+                      sh """#!/busybox/sh
+                      /kaniko/executor --context=$WORKSPACE --destination quay.io/harik8/hadolint:latest --no-push
+                      """
+                     }
+                }
+            }
+        }
+    }
+}
+
+

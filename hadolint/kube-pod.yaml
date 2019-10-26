@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kaniko
+spec:
+  containers:
+  - name: jnlp
+    image: jenkins/jnlp-slave:3.27-1-alpine
+    resources:
+      limits:
+        cpu: 500m
+        memory: 512Mi
+      requests:
+        cpu: 500m
+        memory: 256Mi
+    volumeMounts:
+    - name: workspace
+      mountPath: /workspace
+  - name: kaniko
+    image: gcr.io/kaniko-project/executor:debug-v0.9.0
+    command:
+    - /busybox/cat
+    resources:
+      limits:
+        cpu: 500m
+        memory: 1Gi
+      requests:
+        cpu: 500m
+        memory: 512Mi
+    tty: true
+    volumeMounts:
+#      - name: docker-config
+#        mountPath: /kaniko/.docker/
+      - name: registry-secret
+        mountPath: /secret
+      - name: workspace
+        mountPath: /workspace
+  volumes:
+    - name: workspace
+      emptyDir: {}
+#    - name: docker-config
+#      configMap:
+#        name: nexus-config
+    - name: kaniko-secret
+      secret:
+        secretName: registry-secret
+  restartPolicy: Never
