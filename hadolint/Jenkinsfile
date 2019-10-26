@@ -6,12 +6,13 @@ String release = "latest"
 
 pipeline {
     agent {
-        node {
-            label "kaniko"
-	    yamlFile "kube-pod.yaml"
-        }
-    }
-
+    kubernetes {
+      cloud 'kubernetes'
+      label 'hadolint'
+      defaultContainer 'jnlp'
+      yamlFile 'kube-pod.yaml'
+  }
+}
     stages {
         stage("publish") {
             steps {
