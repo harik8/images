@@ -1,14 +1,12 @@
-String[] buildElements = env.JOB_NAME.split('/')
-String buildName = buildElements[buildElements.length - 2]
-String registry = "quay.io/harik8"
-String dockerImage = "$registry/$buildName"
-String release = "latest"
+String image    = env.JOB_NAME.split('/')[1]
+String registry = "harik8/$image"
+String tag      = "latest"
 
 pipeline {
     agent {
     kubernetes {
       cloud 'kubernetes'
-      label 'kaniko'
+      label 'hadolint'
       defaultContainer 'jnlp'
       yamlFile 'hadolint/kube-pod.yaml'
   }
@@ -19,13 +17,11 @@ pipeline {
                 container(name: 'kaniko', shell: '/busybox/sh') {
                      withEnv(['PATH+EXTRA=/busybox:/kaniko']) {
                       sh """#!/busybox/sh
-                      /kaniko/executor --context=$WORKSPACE --destination $registry/hadolint:$release
+                        /kaniko/executor --context=$WORKSPACE/$image --destination $registry:$tag
                       """
-                     }
+                    }
                 }
             }
         }
     }
 }
-
-
