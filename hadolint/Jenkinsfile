@@ -8,9 +8,9 @@ pipeline {
     agent {
     kubernetes {
       cloud 'kubernetes'
-      label 'hadolint'
+      label 'kaniko'
       defaultContainer 'jnlp'
-      yamlFile 'kube-pod.yaml'
+      yamlFile 'hadolint/kube-pod.yaml'
   }
 }
     stages {
@@ -19,7 +19,7 @@ pipeline {
                 container(name: 'kaniko', shell: '/busybox/sh') {
                      withEnv(['PATH+EXTRA=/busybox:/kaniko']) {
                       sh """#!/busybox/sh
-                      /kaniko/executor --context=$WORKSPACE --destination quay.io/harik8/hadolint:latest --no-push
+                      /kaniko/executor --context=$WORKSPACE --destination $registry/hadolint:$release
                       """
                      }
                 }
