@@ -8,5 +8,3 @@ ADD https://github.com/optiopay/klar/releases/download/v${KLAR_VERSION}/klar-${K
 
 RUN chmod +x klar \
     && mv klar /usr/local/bin
-
-ENTRYPOINT ["/bin/sh"]
