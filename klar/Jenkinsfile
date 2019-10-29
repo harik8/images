@@ -6,9 +6,9 @@ pipeline {
     agent {
     kubernetes {
       cloud 'kubernetes'
-      label 'hadolint'
+      label 'klar'
       defaultContainer 'jnlp'
-      yamlFile 'hadolint/pod.yaml'
+      yamlFile 'klar/pod.yaml'
   }
 }
     stages {
