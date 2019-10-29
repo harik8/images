@@ -8,5 +8,3 @@ ADD https://github.com/hadolint/hadolint/releases/download/v${HADOLINT_VERSION}/
 
 RUN chmod +x hadolint \
     && mv hadolint /usr/local/bin
-
-ENTRYPOINT ["hadolint"]
