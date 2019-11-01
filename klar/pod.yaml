@@ -13,9 +13,18 @@ spec:
       requests:
         cpu: 100m
         memory: 256Mi
-    volumeMounts:
-    - name: workspace
-      mountPath: /workspace
+  - name: lint
+    image: harik8/hadolint:latest
+    command:
+    - cat
+    resources:
+      limits:
+        cpu: 100m
+        memory: 256Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
+    tty: true
   - name: kaniko
     image: gcr.io/kaniko-project/executor:debug-v0.10.0
     command:
@@ -29,13 +38,21 @@ spec:
         memory: 512Mi
     tty: true
     volumeMounts:
-      - name: docker-config
-        mountPath: /kaniko/.docker/
-      - name: workspace
-        mountPath: /workspace
+    - name: docker-config
+      mountPath: /kaniko/.docker/
+  - name: klar
+    image: harik8/klar:latest
+    command:
+    - cat
+    resources:
+      limits:
+        cpu: 100m
+        memory: 256Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
+    tty: true
   volumes:
-    - name: workspace
-      emptyDir: {}
     - name: docker-config
       configMap:
         name: docker-config
