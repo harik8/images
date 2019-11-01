@@ -10,7 +10,7 @@ pipeline {
       	cloud 'kubernetes'
       	label 'hello-docker'
       	defaultContainer 'jnlp'
-      	yamlFile "$image/pod.yaml"
+      	yamlFile 'hadolint/pod.yaml'
       }
     }
     
