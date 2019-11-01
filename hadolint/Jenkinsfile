@@ -10,7 +10,7 @@ pipeline {
       	cloud 'kubernetes'
       	label 'hello-docker'
       	defaultContainer 'jnlp'
-      	yamlFile 'hadolint/pod.yaml'
+      	yamlFile "$image/pod.yaml"
       }
     }
     
@@ -22,7 +22,7 @@ pipeline {
         stage("lint") {
             steps {
                 container("lint") {
-                    sh  "hadolint $WORKSPACE/Dockerfile"
+                    sh  "hadolint $WORKSPACE/$image/Dockerfile"
                 }
             }
         }
@@ -32,7 +32,7 @@ pipeline {
                 container(name: 'kaniko', shell: '/busybox/sh') {
                      withEnv(['PATH+EXTRA=/busybox:/kaniko']) {
                       sh """#!/busybox/sh
-                        /kaniko/executor --context=$WORKSPACE --destination $registry:$tag
+                        /kaniko/executor --context=$WORKSPACE/$image --destination $registry:$tag
                       """
                      }
                 }
