@@ -10,7 +10,7 @@ pipeline {
       	cloud 'kubernetes'
       	label 'hello-docker'
       	defaultContainer 'jnlp'
-      	yamlFile 'klar/pod.yaml'
+      	yamlFile "$image/pod.yaml"
       }
     }
     
@@ -24,7 +24,7 @@ pipeline {
                 container(name: 'kaniko', shell: '/busybox/sh') {
                      withEnv(['PATH+EXTRA=/busybox:/kaniko']) {
                       sh """#!/busybox/sh
-                        /kaniko/executor --context=$WORKSPACE --destination $registry:$tag
+                        /kaniko/executor --context=$WORKSPACE/$image --destination $registry:$tag
                       """
                      }
                 }
