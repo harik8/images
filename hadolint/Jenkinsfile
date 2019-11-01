@@ -8,8 +8,8 @@ pipeline {
     agent {
     kubernetes {
       	cloud 'kubernetes'
-      	label 'hadolint'
       	defaultContainer 'jnlp'
+        label "$image"
       	yamlFile "$image/pod.yaml"
       }
     }
